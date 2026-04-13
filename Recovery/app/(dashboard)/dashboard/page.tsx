@@ -52,7 +52,7 @@ export default async function DashboardPage() {
       {/* Quick actions */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <Link
-          href={`/journal/${today}`}
+          href={`/dashboard/journal/${today}`}
           className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-sm transition"
         >
           <div className="text-2xl mb-2">📖</div>
@@ -61,7 +61,7 @@ export default async function DashboardPage() {
         </Link>
 
         <Link
-          href="/check-ins/new"
+          href="/dashboard/check-ins/new"
           className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-sm transition"
         >
           <div className="text-2xl mb-2">✅</div>
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
         </Link>
 
         <Link
-          href="/steps"
+          href="/dashboard/steps"
           className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-sm transition"
         >
           <div className="text-2xl mb-2">🪜</div>
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Recent Entries</h2>
           <Link
-            href="/journal"
+            href="/dashboard/journal"
             className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
           >
             View all
@@ -108,7 +108,7 @@ export default async function DashboardPage() {
             {recentEntries.map((entry) => (
               <Link
                 key={entry.id}
-                href={`/journal/${entry.entry_date}`}
+                href={`/dashboard/journal/${entry.entry_date}`}
                 className="block px-4 py-3 rounded-lg hover:bg-gray-50 transition"
               >
                 <div className="flex items-center justify-between">

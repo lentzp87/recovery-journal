@@ -22,7 +22,7 @@ export default async function CheckInsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Check-ins</h1>
         <Link
-          href="/check-ins/new"
+          href="/dashboard/check-ins/new"
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
         >
           New check-in
@@ -37,7 +37,7 @@ export default async function CheckInsPage() {
             Quick check-ins help you track your mood and cravings throughout the day.
           </p>
           <Link
-            href="/check-ins/new"
+            href="/dashboard/check-ins/new"
             className="inline-block bg-indigo-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
           >
             First check-in
