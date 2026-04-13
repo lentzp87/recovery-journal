@@ -1,0 +1,36 @@
+{
+  "name": "Recovery Journal",
+  "short_name": "Recovery",
+  "description": "A private journal for your recovery journey",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Journal Entry",
+      "short_name": "Journal",
+      "url": "/dashboard/journal/new"
+    },
+    {
+      "name": "Quick Check-In",
+      "short_name": "Check-In",
+      "url": "/dashboard/check-ins/new"
+    }
+  ]
+}
