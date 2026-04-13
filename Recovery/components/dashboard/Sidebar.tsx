@@ -7,10 +7,10 @@ import { useState } from "react";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: "🏠" },
-  { label: "Journal", href: "/dashboard/journal", icon: "📖" },
-  { label: "Steps", href: "/dashboard/steps", icon: "🪜" },
-  { label: "Check-ins", href: "/dashboard/check-ins", icon: "✅" },
-  { label: "Settings", href: "/dashboard/settings", icon: "⚙️" },
+  { label: "Journal", href: "/journal", icon: "📖" },
+  { label: "Steps", href: "/steps", icon: "🪜" },
+  { label: "Check-ins", href: "/check-ins", icon: "✅" },
+  { label: "Settings", href: "/settings", icon: "⚙️" },
 ];
 
 export function Sidebar({ userEmail }: { userEmail: string }) {

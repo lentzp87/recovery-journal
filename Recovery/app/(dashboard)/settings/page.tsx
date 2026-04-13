@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState, useCallback } from "react";
+import { useNotifications } from "@/lib/hooks/useNotifications";
 
 export default function SettingsPage() {
   const supabase = createClient();
@@ -11,6 +12,17 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [testSending, setTestSending] = useState(false);
+
+  const {
+    permission,
+    isSubscribed,
+    isLoading: notifLoading,
+    preferences: notifPrefs,
+    subscribe,
+    unsubscribe,
+    updatePreferences,
+  } = useNotifications();
 
   const loadProfile = useCallback(async () => {
     const {
@@ -124,6 +136,137 @@ export default function SettingsPage() {
               </select>
             </div>
           </div>
+        </div>
+
+        {/* Notifications */}
+        <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Push Notifications
+          </h2>
+
+          {!("Notification" in globalThis) ? (
+            <p className="text-sm text-gray-500">
+              Push notifications are not supported in this browser.
+            </p>
+          ) : permission === "denied" ? (
+            <p className="text-sm text-red-500">
+              Notifications are blocked. Please enable them in your browser
+              settings to receive reminders.
+            </p>
+          ) : !isSubscribed ? (
+            <div>
+              <p className="text-sm text-gray-600 mb-3">
+                Get morning and evening reminders for your recovery check-ins.
+              </p>
+              <button
+                onClick={subscribe}
+                disabled={notifLoading}
+                className="bg-emerald-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition disabled:opacity-50"
+              >
+                {notifLoading ? "Loading..." : "Enable notifications"}
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    Morning check-in reminder
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Start your day with gratitude
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="time"
+                    value={notifPrefs.morningTime}
+                    onChange={(e) =>
+                      updatePreferences({ morningTime: e.target.value })
+                    }
+                    disabled={!notifPrefs.morningEnabled}
+                    className="px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-gray-900 disabled:opacity-40"
+                  />
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifPrefs.morningEnabled}
+                      onChange={(e) =>
+                        updatePreferences({
+                          morningEnabled: e.target.checked,
+                        })
+                      }
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    Evening reflection reminder
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Reflect on your day
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="time"
+                    value={notifPrefs.eveningTime}
+                    onChange={(e) =>
+                      updatePreferences({ eveningTime: e.target.value })
+                    }
+                    disabled={!notifPrefs.eveningEnabled}
+                    className="px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-gray-900 disabled:opacity-40"
+                  />
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifPrefs.eveningEnabled}
+                      onChange={(e) =>
+                        updatePreferences({
+                          eveningEnabled: e.target.checked,
+                        })
+                      }
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                <button
+                  onClick={async () => {
+                    setTestSending(true);
+                    await fetch("/api/notifications/send", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        title: "Test Notification",
+                        body: "Push notifications are working!",
+                        url: "/dashboard",
+                      }),
+                    });
+                    setTestSending(false);
+                  }}
+                  className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                >
+                  {testSending ? "Sending..." : "Send test notification"}
+                </button>
+                <span className="text-gray-300">|</span>
+                <button
+                  onClick={unsubscribe}
+                  className="text-sm text-red-500 hover:text-red-600 font-medium"
+                >
+                  Disable notifications
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         <button
