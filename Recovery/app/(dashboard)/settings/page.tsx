@@ -13,6 +13,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [testSending, setTestSending] = useState(false);
+  const [exporting, setExporting] = useState<string | null>(null);
 
   const {
     permission,
@@ -267,6 +268,54 @@ export default function SettingsPage() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Data Export */}
+        <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">
+            Export Your Data
+          </h2>
+          <p className="text-sm text-gray-500 mb-4">
+            Download all your journal entries, step work, and check-ins.
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={async () => {
+                setExporting("json");
+                const res = await fetch("/api/export?format=json");
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `recovery-journal-export.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                setExporting(null);
+              }}
+              disabled={exporting !== null}
+              className="bg-gray-900 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
+            >
+              {exporting === "json" ? "Exporting..." : "Export as JSON"}
+            </button>
+            <button
+              onClick={async () => {
+                setExporting("csv");
+                const res = await fetch("/api/export?format=csv");
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `recovery-journal-export.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                setExporting(null);
+              }}
+              disabled={exporting !== null}
+              className="bg-white text-gray-700 px-5 py-2.5 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition disabled:opacity-50"
+            >
+              {exporting === "csv" ? "Exporting..." : "Export as CSV"}
+            </button>
+          </div>
         </div>
 
         <button
